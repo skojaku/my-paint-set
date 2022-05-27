@@ -220,18 +220,4 @@ def _format_axis(
         if not keep_variable_axis:
             ax.get_yaxis().set_visible(False)
             ax.spines["left"].set_visible(False)
-
-
-cmap = sns.color_palette().as_hex()
-cmap = {h: cmap[i] for i, h in enumerate(hue_order)}
-cmap["All"] = "lightslategray"
-
-fig, axes = categorical_kde_plot(
-    plot_data,
-    variable="distance",
-    category="category",
-    category_order=["All"] + hue_order,
-    horizontal=True,
-    cmap=cmap,
-    max_label_width=30,
 ```
