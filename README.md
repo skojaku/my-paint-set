@@ -81,69 +81,6 @@ f = lambda x: textwrap.fill(x.get_text(), 40)
 ax.set_yticklabels(map(f, ax.get_yticklabels()), fontsize=11)
 ```
 
-## Combinations
-### Generate all combinations
-
-```python
-import itertools
-list(itertools.product(["a", "b"], ["c", "d"], ["90", "1"])
-```
-
-## Pandas
-### Fuzzy DataFrame merge
-https://stackoverflow.com/questions/13636848/is-it-possible-to-do-fuzzy-match-merge-with-python-pandas
-
-```python
-from fuzzywuzzy import fuzz
-def fuzzy_merge(df_1, df_2, key1, key2, threshold=90, limit=2):
-    """
-    :param df_1: the left table to join
-    :param df_2: the right table to join
-    :param key1: key column of the left table
-    :param key2: key column of the right table
-    :param threshold: how close the matches should be to return a match, based on Levenshtein distance
-    :param limit: the amount of matches that will get returned, these are sorted high to low
-    :return: dataframe with boths keys and matches
-    """
-    s = df_2[key2].tolist()
-
-    m = df_1[key1].apply(lambda x: process.extract(x, s, limit=limit))
-    df_1["matches"] = m
-
-    m2 = df_1["matches"].apply(
-        lambda x: ", ".join([i[0] for i in x if i[1] >= threshold])
-    )
-    df_1["matches"] = m2
-
-    return df_1
-```
-
-### 
-Statistical methods
-
-###  Parallelize pandas map
-```python
-from multiprocessing import Pool
-def parallelize_dataframe(df, func, n_cores=4):  
-	df_split = np.array_split(df, n_cores)  
-	pool = Pool(n_cores)  
-	df = pd.concat(pool.map(func, df_split))  
-	pool.close()  
-	pool.join()  
-	return df
-```
-
-
-### Parallelize pandas groupby and reduce
-
-```python
-from joblib import Parallel, delayed
-dflist = Parallel(n_jobs=3)(
-    delayed(calc_jump_length)(v["year"], v["emb"], k) for k, v in tqdm(trj.items())
-)
-```
-
-
 # 3D interactive plot in VSCODE
 
 
