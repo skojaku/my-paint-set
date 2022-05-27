@@ -110,16 +110,23 @@ plt.show()
 ```python 
 from textwrap import wrap
 
+
 def categorical_kde_plot(
     df,
     variable,
     category,
     category_order=None,
     horizontal=False,
-    rug=True,
+    rug=False,
     figsize=None,
     cmap=None,
     max_label_width=None,
+    height_ratio=1,
+    fill=True,
+    alpha=1,
+    linewidth=1.2,
+    fig=None,
+    axes=None,
 ):
     """Draw a categorical KDE plot
 
@@ -145,15 +152,16 @@ def categorical_kde_plot(
     else:
         categories = category_order[:]
 
-    figsize = (7, 1.0 * len(categories))
+    figsize = (7, height_ratio * len(categories))
 
-    fig, axes = plt.subplots(
-        nrows=len(categories) if horizontal else 1,
-        ncols=1 if horizontal else len(categories),
-        figsize=figsize[::-1] if not horizontal else figsize,
-        sharex=horizontal,
-        sharey=not horizontal,
-    )
+    if (fig is None) or (axes is None):
+        fig, axes = plt.subplots(
+            nrows=len(categories) if horizontal else 1,
+            ncols=1 if horizontal else len(categories),
+            figsize=figsize[::-1] if not horizontal else figsize,
+            sharex=horizontal,
+            sharey=not horizontal,
+        )
 
     for i, (cat, ax) in enumerate(zip(categories, axes)):
         sns.kdeplot(
@@ -163,9 +171,9 @@ def categorical_kde_plot(
             # kde kwargs
             bw_adjust=0.5,
             clip_on=False,
-            fill=True,
-            alpha=1,
-            linewidth=1.5,
+            fill=fill,
+            alpha=alpha,
+            linewidth=linewidth,
             ax=ax,
             color="lightslategray" if cmap is None else cmap[cat],
         )
@@ -220,4 +228,5 @@ def _format_axis(
         if not keep_variable_axis:
             ax.get_yaxis().set_visible(False)
             ax.spines["left"].set_visible(False)
+
 ```
